@@ -1,0 +1,1 @@
+# calcFotoVolt-STACTIC
