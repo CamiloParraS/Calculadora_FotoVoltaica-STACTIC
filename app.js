@@ -23,6 +23,9 @@ const btnAnual = document.getElementById("btnAnual");
 
 let showMonthly = false;
 
+const format = (n) => n.toLocaleString("es-CO");
+const formatMoney = (n) => "$" + format(n);
+
 function calcular() {
   const d = {
     consumoMensual: parseFloat(inputs.consumoMensual.value) || 0,
@@ -48,8 +51,8 @@ function calcular() {
   outputs.potenciaTotal.textContent = `${d.wattPanel} W c/u -> ${potenciaTotal.toFixed(2)} kWp total`;
   outputs.costoDetalle.textContent = `${paneles} paneles x ${d.costoPorPanel} c/u`;
   outputs.areaTotal.textContent = areaTotal.toFixed(1) + " m^2";
-  outputs.costoTotal.textContent = costoTotalSistema;
-  outputs.costoDetalle.textContent = `${paneles} paneles × ${d.costoPorPanel} c/u`;
+  outputs.costoTotal.textContent = formatMoney(costoTotalSistema);
+  outputs.costoDetalle.textContent = `${paneles} paneles × ${formatMoney(d.costoPorPanel)} c/u`;
 
   const ahorro = showMonthly ? ahorroMensual : ahorroAnual;
   const roi = showMonthly ? roiMensual : roiAnios;
@@ -58,8 +61,9 @@ function calcular() {
   outputs.ahorroLabel.textContent = showMonthly
     ? "Ahorro Mensual Estimado"
     : "Ahorro Anual Estimado";
-  outputs.ahorroValor.textContent = ahorro;
-  outputs.roiValor.textContent = roiAnios.toFixed(1);
+  outputs.ahorroValor.textContent = formatMoney(ahorro);
+  outputs.roiValor.textContent =
+    roi > 0 ? roiAnios.toFixed(1) + " " + unidad : "-";
 }
 
 Object.values(inputs).forEach((i) => i.addEventListener("input", calcular));
