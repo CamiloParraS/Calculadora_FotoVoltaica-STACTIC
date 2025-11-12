@@ -62,8 +62,7 @@ function calcular() {
     ? "Ahorro Mensual Estimado"
     : "Ahorro Anual Estimado";
   outputs.ahorroValor.textContent = formatMoney(ahorro);
-  outputs.roiValor.textContent =
-    roi > 0 ? roiAnios.toFixed(1) + " " + unidad : "-";
+  outputs.roiValor.textContent = roi > 0 ? roi.toFixed(1) + " " + unidad : "-";
 }
 
 Object.values(inputs).forEach((i) => i.addEventListener("input", calcular));

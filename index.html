@@ -9,208 +9,299 @@
             href="https://cdn.jsdelivr.net/npm/modern-normalize@v3.0.1/modern-normalize.min.css"
             rel="stylesheet"
         />
-        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <link rel="icon" href="resources/favicon.png" />
         <style type="text/tailwindcss">
-            @layer components {
-                .card {
-                    @apply bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 hover:shadow-2xl;
+            @layer base {
+                :root {
+                    --bg: #e3e5e8;
+                    --line: #9ea1a7;
+                    --text: #1a1a1a;
+                    --accent: #00e0b0;
+                    --muted: #6c6f73;
+                    --warning: #f59e0b;
                 }
+
+                body {
+                    background-color: var(--bg);
+                    color: var(--text);
+                    font-family: "Inter", "JetBrains Mono", monospace;
+                    letter-spacing: 0.03em;
+                }
+
+                body::before {
+                    content: "";
+                    position: fixed;
+                    inset: 0;
+                    background-image:
+                        linear-gradient(
+                            to right,
+                            rgba(0, 0, 0, 0.04) 1px,
+                            transparent 1px
+                        ),
+                        linear-gradient(
+                            to bottom,
+                            rgba(0, 0, 0, 0.04) 1px,
+                            transparent 1px
+                        );
+                    background-size: 40px 40px;
+                    pointer-events: none;
+                    z-index: 0;
+                }
+
+                input[type="number"]::-webkit-inner-spin-button {
+                    opacity: 0.3;
+                }
+            }
+
+            @layer components {
+                .panel {
+                    @apply border border-[var(--line)] bg-white/50 backdrop-blur-sm p-6 relative overflow-hidden;
+                }
+
+                .panel::after {
+                    content: "";
+                    @apply absolute inset-0 bg-gradient-to-br from-transparent to-white/20 pointer-events-none;
+                }
+
+                .input-label {
+                    @apply text-[10px] uppercase text-[var(--muted)] tracking-widest mb-1 block;
+                }
+
                 .input-field {
-                    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200;
+                    @apply w-full bg-transparent border border-[var(--line)] px-3 py-2 text-sm tracking-wide focus:border-[var(--accent)] focus:ring-0 outline-none transition;
+                }
+
+                .value-display {
+                    @apply text-3xl font-bold;
+                }
+
+                .section-title {
+                    @apply text-sm uppercase text-[var(--muted)] tracking-wider border-b border-[var(--line)] pb-1 mb-4;
+                }
+
+                .rotate-3d {
+                    transform-style: preserve-3d;
+                }
+
+                @keyframes spin-slow {
+                    from {
+                        transform: rotateY(0deg);
+                    }
+                    to {
+                        transform: rotateY(360deg);
+                    }
+                }
+
+                .animate-spin-slow {
+                    animation: spin-slow 25s linear infinite;
+                }
+
+                .warning-icon {
+                    @apply text-[var(--warning)] mr-2;
+                }
+
+                .condition-item {
+                    @apply inline-block mr-4 last:mr-0;
+                }
+
+                .condition-value {
+                    @apply text-lg font-bold;
+                }
+
+                .condition-unit {
+                    @apply text-sm text-[var(--muted)];
                 }
             }
         </style>
     </head>
 
-    <body
-        class="min-h-screen bg-gradient-to-br from-gray-50 t-gray-100 py-8 px-4"
-    >
+    <body class="min-h-screen px-8 py-10 grid-bg relative">
         <div class="max-w-5xl mx-auto">
             <!-- HEADER -->
-            <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
-                    Calculadora Fotovoltaica
-                </h1>
-                <p class="text-lg text-gray-600">
-                    Ingresa tu consumo eléctrico para calcular cuántos paneles
-                    solares necesitas y cuándo recuperarás tu inversión.
-                </p>
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-sm text-[var(--muted)]">
+                    <span>Configuración Fotovoltaica</span>
+                </div>
+                <div class="text-sm text-[var(--muted)]">Calculadora Solar</div>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-6">
                 <!-- Panel de Entrada -->
-                <div class="card">
-                    <h2 class="text-2x1 font-bold text-blue-600 mb-6">
-                        Configuracion
+                <div class="panel">
+                    <h2
+                        class="text-sm uppercase text-[var(--muted)] tracking-wider mb-4"
+                    >
+                        Configuración Actual
                     </h2>
                     <div class="space-y-4">
-                        <div>
-                            <label
-                                for="consumoMensual"
-                                class="block text-sm font-semibold text-gray-700 mb-1"
-                                >Consumo Mensual (kWh)</label
-                            ><input
-                                type="number"
-                                id="consumoMensual"
-                                class="input-field"
-                                value="4125"
-                            />
+                        <div class="flex flex-wrap -mx-2">
+                            <div class="px-2 w-1/2">
+                                <label for="consumoMensual" class="input-label"
+                                    >Consumo Mensual</label
+                                ><input
+                                    type="number"
+                                    id="consumoMensual"
+                                    class="input-field"
+                                    value="4125"
+                                />
+                                <span class="text-xs text-[var(--muted)] ml-3"
+                                    >kWh</span
+                                >
+                            </div>
+                            <div class="px-2 w-1/2">
+                                <label for="hsp" class="input-label">HSP</label
+                                ><input
+                                    type="number"
+                                    id="hsp"
+                                    class="input-field"
+                                    step="0.1"
+                                    value="3.9"
+                                />
+                                <span class="text-xs text-[var(--muted)] ml-3"
+                                    >Horas Sol Pico</span
+                                >
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap -mx-2">
+                            <div class="px-2 w-1/2">
+                                <label for="wattPanel" class="input-label"
+                                    >Potencia Panel</label
+                                ><input
+                                    type="number"
+                                    id="wattPanel"
+                                    class="input-field"
+                                    step="10"
+                                    value="550"
+                                />
+                                <span class="text-xs text-[var(--muted)] ml-3"
+                                    >W</span
+                                >
+                            </div>
+                            <div class="px-2 w-1/2">
+                                <label for="costoPorPanel" class="input-label"
+                                    >Costo Panel</label
+                                ><input
+                                    type="number"
+                                    id="costoPorPanel"
+                                    class="input-field"
+                                    value="2100000"
+                                />
+                                <span class="text-xs text-[var(--muted)] ml-3"
+                                    >$COP</span
+                                >
+                            </div>
                         </div>
                         <div>
-                            <label
-                                for="hsp"
-                                class="block text-sm font-semibold text-gray-700 mb-1"
-                                >HSP (Horas del Sol Pico)</label
-                            ><input
-                                type="number"
-                                id="hsp"
-                                class="input-field"
-                                step="0.1"
-                                value="3.9"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for="wattPanel"
-                                class="block text-sm font-semibold text-gray-700 mb-1"
-                                >Potencia por Panel (W)</label
-                            ><input
-                                type="number"
-                                id="wattPanel"
-                                class="input-field"
-                                step="10"
-                                value="550"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for="costoPorPanel"
-                                class="block text-sm font-semibold text-gray-700 mb-1"
-                                >Costo por Panel ($COP)</label
-                            ><input
-                                type="number"
-                                id="costoPorPanel"
-                                class="input-field"
-                                value="2100000"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                for=""
-                                class="block text-sm font-semibold text-gray-700 mb-1"
-                                >Costo del kWh (COP$)</label
+                            <label for="costoKwh" class="input-label"
+                                >Costo kWh</label
                             ><input
                                 type="number"
                                 id="costoKwh"
                                 class="input-field"
                                 value="926"
                             />
+                            <span class="text-xs text-[var(--muted)] ml-3"
+                                >COP$</span
+                            >
                         </div>
                     </div>
                 </div>
-                <!-- Panel de resultados -->
-                <div class="card">
-                    <h2 class="text-2x1 font-bold text-blue-600 mb-6">
-                        Resultados
+                <!-- Panel de Resultados -->
+                <div class="panel">
+                    <h2
+                        class="text-sm uppercase text-[var(--muted)] tracking-wider mb-4"
+                    >
+                        Reporte Extendido
                     </h2>
-                    <div class="space-y-5">
-                        <!-- Consumo Diario -->
-                        <div class="bg-blue-50 p-4 rounded-x1">
-                            <p class="text-sm opacity-75">Consumo Diario</p>
+                    <div class="space-y-6">
+                        <!-- Consumo Diario como condición actual -->
+                        <div>
                             <p
-                                id="consumoDiario"
-                                class="text-2x1 font-bold text-primary"
+                                class="text-xs uppercase text-[var(--muted)] mb-1"
                             >
-                                -- kWh/dia
+                                Consumo Diario
+                            </p>
+                            <p id="consumoDiario" class="text-2xl font-bold">
+                                -- kWh/día
                             </p>
                         </div>
-                        <!-- Paneles -->
-                        <div class="bg-green-50 p-4 rounded-x1">
-                            <p class="text-sm opacity-75">Paneles Necesarios</p>
+                        <!-- Paneles Necesarios -->
+                        <div>
                             <p
-                                id="paneles"
-                                class="text-3x1 font-bold text-success"
+                                class="text-xs uppercase text-[var(--muted)] mb-1"
                             >
-                                --
+                                Paneles Necesarios
                             </p>
+                            <p id="paneles" class="text-3xl font-bold">--</p>
                             <p
                                 id="potenciaTotal"
-                                class="text-sm text-gray-600 mt-1"
+                                class="text-sm text-[var(--muted)] mt-1"
                             ></p>
                         </div>
-                        <!-- Area -->
-                        <div class="bg-purple-50 p-4 rounded-x1">
-                            <p class="text-sm opacity-75">Area requerida</p>
+                        <!-- Área Requerida -->
+                        <div>
                             <p
-                                id="areaTotal"
-                                class="text-2x1 font-bold text-purple-700"
+                                class="text-xs uppercase text-[var(--muted)] mb-1"
                             >
-                                -- m^2
+                                Área Requerida
+                            </p>
+                            <p id="areaTotal" class="text-2xl font-bold">
+                                -- m²
                             </p>
                         </div>
-                        <!-- Costo Total -->
-                        <div
-                            class="bg-orange-50 p-4 rounded-x1 border border-orange-200"
-                        >
-                            <p class="text-sm opacity-75">Inversion Total</p>
-                            <p
-                                id="costoTotal"
-                                class="text-3xl font-bold text-orange-600"
-                            >
-                                $0
-                            </p>
-                            <p
-                                id="costoDetalle"
-                                class="text-sm text-gray-600 mt-1"
-                            ></p>
-                        </div>
-                        <!-- Ahorro y ROI-->
-                        <div
-                            class="bg-gradient-to-r from-emerald-500 to-teal-600 p-5 rounded-xl text-white"
-                        >
-                            <div class="flex items-start gap-4">
-                                <div>
-                                    <p
-                                        id="ahorroLabel"
-                                        class="text-sm opacity-80"
-                                    >
-                                        Ahorro Anual Estimado
-                                    </p>
-                                    <p
-                                        id="ahorroValor"
-                                        class="text-3xl font-bold neon-text"
-                                    >
-                                        $0
-                                    </p>
-                                </div>
-                                <div
-                                    class="ml-auto inline-flex rounded bg-white/10 p-1"
-                                >
-                                    <button
-                                        id="btnMensual"
-                                        class="px-3 py-1 rounded text-white/70"
-                                    >
-                                        Mensual
-                                    </button>
-                                    <button
-                                        id="btnAnual"
-                                        class="ml-2 px-3 py-1 rounded bg-white text-teal-700"
-                                    >
-                                        Anual
-                                    </button>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            </div>
 
-                            <div class="mt-3 pt-3 border-t border-white/30">
-                                <p class="text-sm opacity-90">
-                                    Retorno de Inversión
-                                </p>
-                                <p id="roiValor" class="text-2xl font-bold">
-                                    --
-                                </p>
-                            </div>
-                        </div>
+            <!-- Sección de Advertencia e Inversión -->
+            <div class="mt-6 panel">
+                <div class="flex items-start">
+                    <div>
+                        <p class="text-xs uppercase text-[var(--muted)]">
+                            Inversión Total
+                        </p>
+                        <p id="costoTotal" class="text-3xl font-bold">$0</p>
+
+                        <p
+                            id="costoDetalle"
+                            class="text-sm text-[var(--muted)] mt-1"
+                        ></p>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <div class="">
+                        <p class="text-xs uppercase text-[var(--muted)]">
+                            Ahorro Estimado
+                        </p>
+                        <p id="ahorroValor" class="text-2xl font-bold">--</p>
+                        <p
+                            id="ahorroLabel"
+                            class="text-xs text-[var(--muted)] mt-1"
+                        ></p>
+                    </div>
+
+                    <div class="inline-flex rounded bg-gray-100 p-1 mt-2">
+                        <button
+                            id="btnMensual"
+                            class="px-3 py-1 rounded text-[var(--muted)]"
+                        >
+                            Mensual
+                        </button>
+                        <button
+                            id="btnAnual"
+                            class="ml-2 px-3 py-1 rounded bg-white text-gray-700"
+                        >
+                            Anual
+                        </button>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-[var(--line)]">
+                        <p class="text-xs uppercase text-[var(--muted)]">
+                            Retorno de Inversión
+                        </p>
+                        <p id="roiValor" class="text-2xl font-bold">--</p>
                     </div>
                 </div>
             </div>
