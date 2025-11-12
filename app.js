@@ -13,8 +13,15 @@ const outputs = {
   areaTotal: document.getElementById("areaTotal"),
   costoTotal: document.getElementById("costoTotal"),
   costoDetalle: document.getElementById("costoDetalle"),
+  ahorroLabel: document.getElementById("ahorroLabel"),
+  ahorroValor: document.getElementById("ahorroValor"),
   roiValor: document.getElementById("roiValor"),
 };
+
+const btnMensual = document.getElementById("btnMensual");
+const btnAnual = document.getElementById("btnAnual");
+
+let showMonthly = false;
 
 function calcular() {
   const d = {
@@ -42,9 +49,32 @@ function calcular() {
   outputs.costoDetalle.textContent = `${paneles} paneles x ${d.costoPorPanel} c/u`;
   outputs.areaTotal.textContent = areaTotal.toFixed(1) + " m^2";
   outputs.costoTotal.textContent = costoTotalSistema;
+  outputs.costoDetalle.textContent = `${paneles} paneles × ${d.costoPorPanel} c/u`;
+
+  const ahorro = showMonthly ? ahorroMensual : ahorroAnual;
+  const roi = showMonthly ? roiMensual : roiAnios;
+  const unidad = showMonthly ? "meses" : "años";
+
+  outputs.ahorroLabel.textContent = showMonthly
+    ? "Ahorro Mensual Estimado"
+    : "Ahorro Anual Estimado";
+  outputs.ahorroValor.textContent = ahorro;
   outputs.roiValor.textContent = roiAnios.toFixed(1);
 }
 
 Object.values(inputs).forEach((i) => i.addEventListener("input", calcular));
+
+btnMensual.onclick = () => {
+  showMonthly = true;
+  btnMensual.className = "px-3 py-1 rounded bg-white text-teal-700";
+  btnAnual.className = "ml-2 px-3 py-1 rounded text-white/70";
+  calcular();
+};
+btnAnual.onclick = () => {
+  showMonthly = false;
+  btnAnual.className = "ml-2 px-3 py-1 rounded bg-white text-teal-700";
+  btnMensual.className = "px-3 py-1 rounded text-white/70";
+  calcular();
+};
 
 calcular();
