@@ -69,14 +69,14 @@ Object.values(inputs).forEach((i) => i.addEventListener("input", calcular));
 
 btnMensual.onclick = () => {
   showMonthly = true;
-  btnMensual.className = "px-3 py-1 rounded bg-white text-teal-700";
-  btnAnual.className = "ml-2 px-3 py-1 rounded text-white/70";
+  btnMensual.className = "px-3 py-1 rounded bg-white text-gray-700";
+  btnAnual.className = "ml-2 px-3 py-1 rounded text-[var(--muted)]";
   calcular();
 };
 btnAnual.onclick = () => {
   showMonthly = false;
-  btnAnual.className = "ml-2 px-3 py-1 rounded bg-white text-teal-700";
-  btnMensual.className = "px-3 py-1 rounded text-white/70";
+  btnAnual.className = "ml-2 px-3 py-1 rounded bg-white text-gray-700";
+  btnMensual.className = "px-3 py-1 rounded text-[var(--muted)]";
   calcular();
 };
 
